@@ -88,7 +88,7 @@ English Unseen Passage - Set <span id="setLabel">1</span>
 </div>
 
 <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white/50 shadow-inner bg-gray-600">
-    <img src="vandana.jpg" alt="User" class="w-full h-full object-cover">
+<img src="vandana.jpg" class="w-full h-full object-cover">
 </div>
 
 </div>
@@ -202,11 +202,7 @@ SUBMIT TEST
 let currentIdx=0
 let timeLeft=30*60
 let questions=[]
-let userAnswers=[]
-let status=[]
 let setNum=new URLSearchParams(window.location.search).get('set')||'1'
-
-/* FIXED DATA LOADING */
 
 const rawData = JSON.parse(localStorage.getItem("currentTestData"))
 
@@ -225,15 +221,13 @@ passageText:p.text
 })
 })
 
-userAnswers=new Array(questions.length).fill(null)
-status=new Array(questions.length).fill('not-visited')
+let userAnswers = JSON.parse(localStorage.getItem("userAnswers")) || new Array(questions.length).fill(null)
+let status = JSON.parse(localStorage.getItem("status")) || new Array(questions.length).fill('not-visited')
 
 document.getElementById('setLabel').innerText=setNum
 
 renderQuestion()
 startTimer()
-
-/* TIMER */
 
 function startTimer(){
 
@@ -249,10 +243,8 @@ let s=timeLeft%60
 timerEl.innerText=`${m}:${s<10?'0':''}${s}`
 
 if(timeLeft<=0){
-
 clearInterval(interval)
 autoSubmit()
-
 }
 
 },1000)
@@ -279,11 +271,8 @@ const isSelected=userAnswers[currentIdx]===letter
 optList.innerHTML+=`
 
 <label class="flex items-center p-3 border rounded-lg cursor-pointer ${isSelected?'bg-blue-50 border-blue-500':''}">
-
 <input type="radio" name="option" ${isSelected?'checked':''} onchange="selectOption('${letter}')">
-
 <span class="ml-3">${letter}. ${opt}</span>
-
 </label>
 
 `
@@ -313,6 +302,9 @@ grid.innerHTML+=`<div onclick="jumpTo(${i})" class="q-btn ${cls} ${currentIdx===
 function selectOption(val){
 
 userAnswers[currentIdx]=val
+
+localStorage.setItem("userAnswers",JSON.stringify(userAnswers))
+
 renderQuestion()
 
 }
@@ -320,6 +312,8 @@ renderQuestion()
 function saveAndNext(){
 
 status[currentIdx]=userAnswers[currentIdx]!==null?'answered':'not-answered'
+
+localStorage.setItem("status",JSON.stringify(status))
 
 if(currentIdx<questions.length-1){
 currentIdx++
@@ -332,6 +326,8 @@ function markForReview(){
 
 status[currentIdx]='marked'
 
+localStorage.setItem("status",JSON.stringify(status))
+
 if(currentIdx<questions.length-1){
 currentIdx++
 renderQuestion()
@@ -343,6 +339,10 @@ function clearResponse(){
 
 userAnswers[currentIdx]=null
 status[currentIdx]='not-visited'
+
+localStorage.setItem("userAnswers",JSON.stringify(userAnswers))
+localStorage.setItem("status",JSON.stringify(status))
+
 renderQuestion()
 
 }
@@ -350,6 +350,8 @@ renderQuestion()
 function jumpTo(i){
 
 if(status[currentIdx]==='not-visited')status[currentIdx]='not-answered'
+
+localStorage.setItem("status",JSON.stringify(status))
 
 currentIdx=i
 renderQuestion()
@@ -366,9 +368,7 @@ document.getElementById('count-not-visited').innerText=status.filter(s=>s==='not
 }
 
 function confirmSubmit(){
-
 if(confirm("Are you sure you want to submit the test?"))autoSubmit()
-
 }
 
 function autoSubmit(){
@@ -376,22 +376,17 @@ function autoSubmit(){
 let correct=0,wrong=0
 
 userAnswers.forEach((ans,i)=>{
-
 if(ans!==null){
-
 if(ans===questions[i].answer) correct++
 else wrong++
-
 }
-
 })
 
 const score=(correct*5)-(wrong*1)
 
-/* SAVE USER ANSWERS */
 localStorage.setItem("userAnswers", JSON.stringify(userAnswers))
+localStorage.setItem("status", JSON.stringify(status))
 
-/* SAVE SCORE */
 localStorage.setItem("lastScore", JSON.stringify({
 correct:correct,
 wrong:wrong,
@@ -399,7 +394,6 @@ score:score,
 total:questions.length
 }))
 
-/* SAVE LAST SET */
 localStorage.setItem("lastSet", setNum)
 
 window.location.href="result.html"
