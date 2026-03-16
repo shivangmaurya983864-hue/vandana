@@ -1,149 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Review Answers | Vandna's Portal</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: #05070a; 
-            color: white; 
-            min-height: 100vh;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Review Answers | Vandna's Portal</title>
 
-        .header-glass {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        .answer-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 24px;
-            transition: 0.3s;
-            overflow: hidden;
-        }
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
 
-        .answer-card:hover {
-            border-color: rgba(129, 140, 248, 0.3);
-            background: rgba(255, 255, 255, 0.04);
-        }
+body{
+font-family:'Plus Jakarta Sans',sans-serif;
+background:#05070a;
+color:white;
+min-height:100vh;
+}
 
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 100px;
-            font-size: 0.7rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+.header-glass{
+background:rgba(255,255,255,0.03);
+backdrop-filter:blur(15px);
+border-bottom:1px solid rgba(255,255,255,0.1);
+position:sticky;
+top:0;
+z-index:100;
+}
 
-        .correct-bg { background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.2); }
-        .wrong-bg { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); }
-        
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #05070a; }
-        ::-webkit-scrollbar-thumb { background: #1e1b4b; border-radius: 10px; }
-    </style>
+.answer-card{
+background:rgba(255,255,255,0.02);
+border:1px solid rgba(255,255,255,0.05);
+border-radius:24px;
+transition:0.3s;
+overflow:hidden;
+}
+
+.answer-card:hover{
+border-color:rgba(129,140,248,0.3);
+background:rgba(255,255,255,0.04);
+}
+
+.status-badge{
+padding:4px 12px;
+border-radius:100px;
+font-size:0.7rem;
+font-weight:800;
+text-transform:uppercase;
+letter-spacing:1px;
+}
+
+.correct-bg{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);}
+.wrong-bg{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);}
+
+::-webkit-scrollbar{width:8px;}
+::-webkit-scrollbar-track{background:#05070a;}
+::-webkit-scrollbar-thumb{background:#1e1b4b;border-radius:10px;}
+
+</style>
 </head>
+
 <body class="pb-12">
 
-    <header class="header-glass p-4 mb-8">
-        <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <a href="result.html" class="text-gray-400 hover:text-white transition">
-                <i class="fas fa-arrow-left mr-2"></i> Back to Result
-            </a>
-            <h1 class="text-lg font-bold">Detailed Analysis</h1>
-            <div class="text-indigo-400 font-bold">Vandna</div>
-        </div>
-    </header>
+<header class="header-glass p-4 mb-8">
+<div class="max-w-4xl mx-auto flex justify-between items-center">
 
-    <main class="max-w-4xl mx-auto px-6">
-        
-        <div class="mb-12 text-center">
-            <h2 class="text-3xl font-extrabold mb-2">Review Your Brilliance</h2>
-            <p class="text-gray-500 italic">"Mistakes are proof that you are trying. Learning from them is proof of your genius."</p>
-        </div>
+<a href="result.html" class="text-gray-400 hover:text-white transition">
+<i class="fas fa-arrow-left mr-2"></i> Back to Result
+</a>
 
-        <div id="answersContainer" class="space-y-6">
-            </div>
+<h1 class="text-lg font-bold">Detailed Analysis</h1>
 
-        <div class="mt-12 text-center">
-            <button onclick="window.location.href='sets.html'" class="bg-indigo-600 hover:bg-indigo-500 text-white px-10 py-4 rounded-full font-bold transition shadow-lg shadow-indigo-500/20">
-                Master Next Set <i class="fas fa-chevron-right ml-2"></i>
-            </button>
-        </div>
-    </main>
+<div class="text-indigo-400 font-bold">Vandna</div>
 
-    <script>
-        // Sample data structure (In reality, this comes from your test storage)
-        const reviewData = [
-            {
-                id: 1,
-                question: "What was the primary theme of the second passage?",
-                userAnswer: "Historical Evolution",
-                correctAnswer: "Environmental Impact",
-                isCorrect: false,
-                explanation: "The passage explicitly mentions the degradation of forests in the third paragraph, pointing towards environmental concerns."
-            },
-            {
-                id: 2,
-                question: "According to the author, why did the migration happen?",
-                userAnswer: "Economic Stability",
-                correctAnswer: "Economic Stability",
-                isCorrect: true,
-                explanation: "Line 14 states that people sought better job opportunities for financial growth."
-            }
-        ];
+</div>
+</header>
 
-        function loadAnswers() {
-            const container = document.getElementById('answersContainer');
-            
-            reviewData.forEach((item, index) => {
-                const card = document.createElement('div');
-                card.className = `answer-card p-6 slide-up`;
-                
-                card.innerHTML = `
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="text-xs font-bold text-gray-600 uppercase tracking-widest">Question ${index + 1}</span>
-                        <span class="status-badge ${item.isCorrect ? 'text-green-400' : 'text-red-400'}">
-                            ${item.isCorrect ? '<i class="fas fa-check-circle mr-1"></i> Correct' : '<i class="fas fa-times-circle mr-1"></i> Incorrect'}
-                        </span>
-                    </div>
-                    
-                    <h3 class="text-lg font-semibold mb-6 leading-relaxed">${item.question}</h3>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <div class="p-4 rounded-2xl ${item.isCorrect ? 'correct-bg' : 'wrong-bg'}">
-                            <p class="text-[10px] uppercase font-bold text-gray-500 mb-1">Your Answer</p>
-                            <p class="font-medium">${item.userAnswer}</p>
-                        </div>
-                        <div class="p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/20">
-                            <p class="text-[10px] uppercase font-bold text-indigo-400 mb-1">Correct Answer</p>
-                            <p class="font-medium">${item.correctAnswer}</p>
-                        </div>
-                    </div>
-                    
-                    <div class="pt-4 border-t border-white/5">
-                        <p class="text-sm text-gray-400 italic">
-                            <span class="text-indigo-400 font-bold not-italic">Logic:</span> ${item.explanation}
-                        </p>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
 
-        window.onload = loadAnswers;
-    </script>
+<main class="max-w-4xl mx-auto px-6">
+
+<div class="mb-12 text-center">
+<h2 class="text-3xl font-extrabold mb-2">Review Your Brilliance</h2>
+<p class="text-gray-500 italic">
+"Mistakes are proof that you are trying. Learning from them is proof of your genius."
+</p>
+</div>
+
+<div id="answersContainer" class="space-y-6"></div>
+
+<div class="mt-12 text-center">
+<button onclick="window.location.href='sets.html'"
+class="bg-indigo-600 hover:bg-indigo-500 text-white px-10 py-4 rounded-full font-bold transition shadow-lg shadow-indigo-500/20">
+Master Next Set <i class="fas fa-chevron-right ml-2"></i>
+</button>
+</div>
+
+</main>
+
+
+<script>
+
+function loadAnswers(){
+
+const container=document.getElementById("answersContainer")
+
+const testData=JSON.parse(localStorage.getItem("currentTestData"))
+const userAnswers=JSON.parse(localStorage.getItem("userAnswers"))||[]
+
+if(!testData){
+container.innerHTML="<p class='text-center text-gray-400'>No answer data found.</p>"
+return
+}
+
+let questions=[]
+
+testData.passages.forEach(p=>{
+p.questions.forEach(q=>{
+questions.push(q)
+})
+})
+
+questions.forEach((q,i)=>{
+
+const user=userAnswers[i]
+
+const correctLetter=q.answer
+const correctIndex=correctLetter.charCodeAt(0)-65
+const correctAnswer=q.options[correctIndex]
+
+let userAnswer="Not Attempted"
+let isCorrect=false
+
+if(user){
+const userIndex=user.charCodeAt(0)-65
+userAnswer=q.options[userIndex]
+isCorrect=user===correctLetter
+}
+
+const card=document.createElement("div")
+card.className="answer-card p-6"
+
+card.innerHTML=`
+
+<div class="flex justify-between items-start mb-4">
+
+<span class="text-xs font-bold text-gray-600 uppercase tracking-widest">
+Question ${i+1}
+</span>
+
+<span class="status-badge ${isCorrect?'text-green-400':'text-red-400'}">
+
+${isCorrect
+?'<i class="fas fa-check-circle mr-1"></i> Correct'
+:'<i class="fas fa-times-circle mr-1"></i> Incorrect'}
+
+</span>
+
+</div>
+
+<h3 class="text-lg font-semibold mb-6 leading-relaxed">
+${q.question}
+</h3>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+
+<div class="p-4 rounded-2xl ${isCorrect?'correct-bg':'wrong-bg'}">
+<p class="text-[10px] uppercase font-bold text-gray-500 mb-1">
+Your Answer
+</p>
+<p class="font-medium">${userAnswer}</p>
+</div>
+
+<div class="p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/20">
+<p class="text-[10px] uppercase font-bold text-indigo-400 mb-1">
+Correct Answer
+</p>
+<p class="font-medium">${correctAnswer}</p>
+</div>
+
+</div>
+
+<div class="pt-4 border-t border-white/5">
+<p class="text-sm text-gray-400 italic">
+<span class="text-indigo-400 font-bold not-italic">Logic:</span>
+Refer to the passage for the correct explanation.
+</p>
+</div>
+`
+
+container.appendChild(card)
+
+})
+
+}
+
+window.onload=loadAnswers
+
+</script>
+
 </body>
 </html>

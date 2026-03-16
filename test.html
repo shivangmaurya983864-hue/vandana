@@ -379,7 +379,7 @@ userAnswers.forEach((ans,i)=>{
 
 if(ans!==null){
 
-if(ans===questions[i].answer)correct++
+if(ans===questions[i].answer) correct++
 else wrong++
 
 }
@@ -388,14 +388,21 @@ else wrong++
 
 const score=(correct*5)-(wrong*1)
 
-localStorage.setItem('lastScore',JSON.stringify({
-correct,
-wrong,
-score,
+/* SAVE USER ANSWERS */
+localStorage.setItem("userAnswers", JSON.stringify(userAnswers))
+
+/* SAVE SCORE */
+localStorage.setItem("lastScore", JSON.stringify({
+correct:correct,
+wrong:wrong,
+score:score,
 total:questions.length
 }))
 
-window.location.href='result.html'
+/* SAVE LAST SET */
+localStorage.setItem("lastSet", setNum)
+
+window.location.href="result.html"
 
 }
 
