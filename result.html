@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Analysis | Vandna's Results</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+
+body{
+font-family:'Plus Jakarta Sans',sans-serif;
+background: radial-gradient(circle at 20% 20%,#0f172a,#020408);
+color:white;
+height:100vh;
+overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+animation:bgMove 10s infinite alternate;
+}
+
+@keyframes bgMove{
+from{background-position:0% 50%}
+to{background-position:100% 50%}
+}
+
+.main-card{
+background:rgba(255,255,255,0.04);
+backdrop-filter:blur(30px);
+border:1px solid rgba(255,255,255,0.1);
+border-radius:50px;
+width:90%;
+max-width:750px;
+padding:3.5rem;
+text-align:center;
+box-shadow:0 60px 120px rgba(0,0,0,0.6);
+transition:0.4s;
+}
+
+.main-card:hover{
+transform:translateY(-6px);
+box-shadow:0 80px 140px rgba(0,0,0,0.8);
+}
+
+.serif-font{
+font-family:'Playfair Display',serif;
+}
+
+.score-display{
+font-size:6rem;
+font-weight:900;
+line-height:1;
+background:linear-gradient(135deg,#ffffff,#818cf8,#c084fc);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+margin-bottom:0.5rem;
+}
+
+.stat-box{
+background:rgba(255,255,255,0.06);
+padding:1.2rem;
+border-radius:20px;
+border:1px solid rgba(255,255,255,0.05);
+transition:0.3s;
+}
+
+.stat-box:hover{
+transform:scale(1.05);
+}
+
+.btn-action{
+padding:1rem 2rem;
+border-radius:100px;
+font-weight:700;
+transition:0.3s;
+text-transform:uppercase;
+font-size:0.75rem;
+letter-spacing:1px;
+}
+
+.btn-primary{
+background:white;
+color:black;
+}
+
+.btn-primary:hover{
+transform:scale(1.08);
+box-shadow:0 0 25px rgba(255,255,255,0.3);
+}
+
+#statusIcon{
+animation:floatIcon 3s ease-in-out infinite;
+}
+
+@keyframes floatIcon{
+0%{transform:translateY(0px)}
+50%{transform:translateY(-10px)}
+100%{transform:translateY(0px)}
+}
+</style>
+</head>
+
+<body>
+
+<div class="main-card">
+<div id="statusIcon" class="text-6xl mb-4">✨</div>
+<h1 id="resultTitle" class="text-4xl font-black mb-2 serif-font italic">Analyzing...</h1>
+<p id="resultQuote" class="text-gray-400 mb-8 text-lg">Just wait a second...</p>
+
+<div class="mb-8">
+<h2 id="scoreValue" class="score-display">00</h2>
+<p class="text-xs tracking-[0.4em] text-indigo-400 font-bold uppercase">Points Earned</p>
+</div>
+
+<div class="grid grid-cols-3 gap-4 mb-10">
+<div class="stat-box">
+<p class="text-[10px] text-gray-400 uppercase mb-1">Correct</p>
+<h4 id="correct" class="text-xl font-bold text-green-400">0</h4>
+</div>
+<div class="stat-box">
+<p class="text-[10px] text-gray-400 uppercase mb-1">Accuracy</p>
+<h4 id="accuracy" class="text-xl font-bold text-indigo-300">0%</h4>
+</div>
+<div class="stat-box">
+<p class="text-[10px] text-gray-400 uppercase mb-1">Wrong</p>
+<h4 id="wrong" class="text-xl font-bold text-red-400">0</h4>
+</div>
+</div>
+
+<div class="flex flex-col md:flex-row gap-4 justify-center">
+<button onclick="location.href='sets.html'" class="btn-action btn-primary">Try Another Set</button>
+<button onclick="location.href='progress.html'" class="btn-action border border-white/10 hover:bg-white/5">Performance Hub</button>
+</div>
+</div>
+
+<script>
+window.onload = () => {
+const data = JSON.parse(localStorage.getItem('lastScore')) || {correct:0,wrong:0,score:0,total:18};
+const score = data.score;
+const scoreEl = document.getElementById('scoreValue');
+const titleEl = document.getElementById('resultTitle');
+const quoteEl = document.getElementById('resultQuote');
+const iconEl = document.getElementById('statusIcon');
+
+document.getElementById('correct').innerText = data.correct;
+document.getElementById('wrong').innerText = data.wrong;
+document.getElementById('accuracy').innerText = Math.round((data.correct/data.total)*100)+"%";
+
+/* SCORE ANIMATION */
+let count=0;
+const counter=setInterval(()=>{
+scoreEl.innerText=count;
+count++;
+if(count>score){
+clearInterval(counter);
+}
+},30);
+
+/* ROYAL CELEBRATION LOGIC */
+if(score >= 70){
+titleEl.innerText="Elite Victory";
+titleEl.style.background = "linear-gradient(135deg, #fde047, #fbbf24)";
+titleEl.style.webkitBackgroundClip = "text";
+titleEl.style.webkitTextFillColor = "transparent";
+
+quoteEl.innerText="Vandna, this result is truly exceptional. Your dedication, focus, and effort have created something remarkable today.";
+
+iconEl.innerText="👑";
+
+const end = Date.now() + 5000;
+const colors = ['#ffffff', '#fbbf24', '#818cf8'];
+
+(function frame() {
+  confetti({
+    particleCount: 4,
+    angle: 60,
+    spread: 60,
+    origin: { x: 0 },
+    colors: colors
+  });
+  confetti({
+    particleCount: 4,
+    angle: 120,
+    spread: 60,
+    origin: { x: 1 },
+    colors: colors
+  });
+
+  if (Date.now() < end) {
+    requestAnimationFrame(frame);
+  }
+}());
+
+setTimeout(() => {
+    confetti({
+        particleCount: 150,
+        spread: 100,
+        origin: { y: 0.6 },
+        colors: ['#fbbf24', '#ffffff', '#c084fc']
+    });
+}, 500);
+
+}
+else if(score >= 50){
+titleEl.innerText="Brilliant Effort";
+quoteEl.innerText="This score shows your growing strength and consistency. You're moving closer to something great.";
+
+iconEl.innerText="✨";
+
+confetti({
+particleCount: 200,
+spread: 100,
+origin: { y: 0.6 }
+});
+}
+else if(score >= 30){
+titleEl.innerText="Keep Rising";
+quoteEl.innerText="Progress is built step by step. Every attempt like this is shaping a stronger version of you.";
+
+iconEl.innerText="🎉";
+
+confetti({
+particleCount: 100,
+spread: 70,
+origin: { y: 0.6 }
+});
+}
+else{
+titleEl.innerText="The Journey Begins";
+quoteEl.innerText="Every champion starts somewhere. What matters is that you keep learning, improving, and moving forward.";
+
+iconEl.innerText="💫";
+scoreEl.style.background="linear-gradient(135deg,#94a3b8,#ffffff)";
+scoreEl.style.webkitBackgroundClip="text";
+}
+};
+</script>
+
+</body>
+</html>

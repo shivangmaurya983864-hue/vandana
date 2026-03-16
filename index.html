@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Queen Vandana | Your Royal Journey</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+--primary:#ff7eb3;
+--secondary:#8b5cf6;
+--bg:#030307;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Plus Jakarta Sans',sans-serif;
+}
+
+body{
+background:var(--bg);
+color:white;
+height:100vh;
+overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.mesh{
+position:absolute;
+inset:0;
+background:
+radial-gradient(circle at 10% 20%,rgba(255,126,179,0.1)0%,transparent 40%),
+radial-gradient(circle at 90% 80%,rgba(139,92,246,0.1)0%,transparent 40%);
+z-index:-1;
+filter:blur(100px);
+}
+
+.glass-card{
+background:rgba(255,255,255,0.03);
+backdrop-filter:blur(40px);
+border:1px solid rgba(255,255,255,0.1);
+padding:60px 80px;
+border-radius:60px;
+text-align:center;
+box-shadow:0 40px 120px rgba(0,0,0,0.8);
+position:relative;
+}
+
+.profile-container{
+position:relative;
+width:140px;
+height:140px;
+margin:0 auto 35px;
+}
+
+.profile-aura{
+position:absolute;
+inset:-10px;
+background:linear-gradient(45deg,var(--primary),#fbbf24,var(--secondary));
+border-radius:50%;
+filter:blur(15px);
+opacity:0.6;
+animation:pulseAura 4s infinite alternate;
+}
+
+@keyframes pulseAura{
+0%{transform:scale(1);opacity:0.4;}
+100%{transform:scale(1.1);opacity:0.8;}
+}
+
+.profile-img{
+width:100%;
+height:100%;
+border-radius:50%;
+object-fit:cover;
+border:3px solid rgba(255,255,255,0.9);
+position:relative;
+z-index:2;
+}
+
+.name-title{
+font-size:85px;
+font-weight:800;
+letter-spacing:-4px;
+background:linear-gradient(135deg,#fff 20%,#ff7eb3 50%,#8b5cf6 80%);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+line-height:1;
+margin-bottom:10px;
+}
+
+.tagline{
+font-family:'Dancing Script',cursive;
+font-size:38px;
+color:#fda4af;
+text-shadow:0 0 20px rgba(253,164,175,0.3);
+}
+
+.btn-luxe{
+margin-top:45px;
+padding:20px 60px;
+background:white;
+color:black;
+border-radius:100px;
+font-weight:800;
+text-transform:uppercase;
+letter-spacing:4px;
+font-size:12px;
+transition:all .4s ease;
+display:inline-block;
+cursor:pointer;
+border:none;
+}
+
+.btn-luxe:hover{
+transform:translateY(-5px);
+background:var(--primary);
+color:white;
+box-shadow:0 20px 40px rgba(255,126,179,0.4);
+}
+
+.shape{
+position:absolute;
+pointer-events:none;
+opacity:.2;
+animation:floatSlow 15s infinite linear;
+}
+
+@keyframes floatSlow{
+from{transform:translateY(110vh) rotate(0deg);}
+to{transform:translateY(-20vh) rotate(360deg);}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="mesh"></div>
+
+<div class="glass-card">
+
+<div class="absolute -top-6 -right-6 text-5xl opacity-20">👑</div>
+<div class="absolute -bottom-6 -left-6 text-5xl opacity-20">✨</div>
+
+<div class="profile-container">
+<div class="profile-aura"></div>
+<img src="vandana.jpg" class="profile-img">
+</div>
+
+<p class="text-[10px] tracking-[15px] text-yellow-400 font-light mb-4 uppercase">
+The One & Only Queen
+</p>
+
+<h1 class="name-title">
+VANDANA
+</h1>
+
+<p class="tagline">
+Grace like a queen,  
+brilliance like a star.
+</p>
+
+<p class="text-white/60 text-sm mt-4 max-w-md mx-auto leading-relaxed">
+This little world was crafted with admiration —  
+a place where every challenge you conquer and every step you take  
+brings you closer to the greatness you truly deserve.
+</p>
+
+<div class="flex flex-col items-center gap-6 mt-6">
+
+<a href="sets.html" class="btn-luxe">
+Begin The Royal Journey
+</a>
+
+<a href="progress.html" class="text-[9px] tracking-[6px] text-white/30 uppercase hover:text-white transition">
+See Your Kingdom's Progress
+</a>
+
+</div>
+
+</div>
+
+<script>
+
+function createParticle(){
+
+const icons=['✨','💎','🌸','👑','🤍']
+
+const p=document.createElement('div')
+
+p.className='shape'
+
+p.innerHTML=icons[Math.floor(Math.random()*icons.length)]
+
+p.style.left=Math.random()*100+'vw'
+
+p.style.fontSize=Math.random()*20+10+'px'
+
+p.style.animationDuration=Math.random()*10+10+'s'
+
+document.body.appendChild(p)
+
+setTimeout(()=>p.remove(),20000)
+
+}
+
+setInterval(createParticle,2000)
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CUET Exam Portal | Live Test</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+body{font-family:'Roboto',sans-serif;background-color:#f1f5f9}
+.nta-header{background:#2c3e50;color:white}
+
+.passage-box{
+height:calc(100vh - 250px);
+overflow-y:auto;
+border:1px solid #ddd;
+background:#fff;
+padding:20px;
+border-radius:8px
+}
+
+.question-box{
+height:calc(100vh - 250px);
+overflow-y:auto;
+background:#fff;
+padding:20px;
+border-radius:8px;
+border:1px solid #ddd
+}
+
+.q-btn{
+width:35px;
+height:35px;
+border-radius:4px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:12px;
+font-weight:bold;
+cursor:pointer;
+border:1px solid #ccc;
+background:#fff
+}
+
+.q-answered{background-color:#27ae60;color:white;border-color:#27ae60;border-radius:50% 50% 0 0}
+.q-not-answered{background-color:#e74c3c;color:white;border-color:#e74c3c;border-radius:0 0 50% 50%}
+.q-marked{background-color:#8e44ad;color:white;border-color:#8e44ad;border-radius:50%}
+
+.q-active{
+border:2px solid #2c3e50;
+box-shadow:0 0 5px rgba(0,0,0,.3)
+}
+
+.btn-nta{
+padding:8px 15px;
+border-radius:4px;
+font-weight:500;
+transition:.2s;
+font-size:14px
+}
+
+.btn-save{background:#27ae60;color:white}
+.btn-mark{background:#f39c12;color:white}
+.btn-clear{background:#ecf0f1;color:#333;border:1px solid #bdc3c7}
+</style>
+</head>
+
+<body class="flex flex-col h-screen">
+
+<header class="nta-header p-3 flex justify-between items-center shadow-md">
+
+<div class="flex items-center gap-4">
+<span class="bg-white text-black px-3 py-1 rounded font-bold text-sm">CUET 2026</span>
+<h1 class="font-medium hidden md:block">
+English Unseen Passage - Set <span id="setLabel">1</span>
+</h1>
+</div>
+
+<div class="flex items-center gap-6">
+
+<div class="text-right">
+<p class="text-xs opacity-80">Time Remaining</p>
+<p id="timer" class="text-xl font-mono font-bold text-yellow-400">30:00</p>
+</div>
+
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white/50 shadow-inner bg-gray-600">
+    <img src="vandana.jpg" alt="User" class="w-full h-full object-cover">
+</div>
+
+</div>
+</header>
+
+<main class="flex-1 grid grid-cols-1 lg:grid-cols-4 p-4 gap-4 overflow-hidden">
+
+<div class="lg:col-span-2 flex flex-col gap-2">
+
+<div class="bg-indigo-600 text-white px-4 py-1 rounded-t-lg text-sm font-bold">
+READING COMPREHENSION
+</div>
+
+<div class="passage-box">
+
+<h3 class="font-bold mb-4 text-lg" id="passageTitle">Passage</h3>
+
+<p class="leading-relaxed text-gray-700" id="passageText">
+Loading passage content...
+</p>
+
+</div>
+
+</div>
+
+<div class="lg:col-span-1 flex flex-col gap-2">
+
+<div class="bg-gray-700 text-white px-4 py-1 rounded-t-lg text-sm font-bold">
+QUESTION AREA
+</div>
+
+<div class="question-box">
+
+<p class="text-sm text-gray-500 mb-2">
+Question No. <span id="qIdxDisplay">1</span>
+</p>
+
+<h4 class="font-bold text-lg mb-6" id="questionText">
+Loading question...
+</h4>
+
+<div class="space-y-4" id="optionsList"></div>
+
+</div>
+
+<div class="grid grid-cols-2 gap-2 mt-2">
+
+<button onclick="markForReview()" class="btn-nta btn-mark">
+Mark for Review
+</button>
+
+<button onclick="clearResponse()" class="btn-nta btn-clear">
+Clear Response
+</button>
+
+<button onclick="saveAndNext()" class="btn-nta btn-save col-span-2 text-lg py-3">
+Save & Next
+</button>
+
+</div>
+
+</div>
+
+<div class="lg:col-span-1 flex flex-col gap-4">
+
+<div class="bg-white p-4 rounded-lg border">
+<h4 class="font-bold text-sm mb-4 border-b pb-2 text-gray-600 uppercase">
+Question Palette
+</h4>
+<div class="grid grid-cols-5 gap-2" id="paletteGrid"></div>
+</div>
+
+<div class="bg-white p-4 rounded-lg border flex-1">
+
+<h4 class="font-bold text-sm mb-4 border-b pb-2 text-gray-600 uppercase">
+Summary
+</h4>
+
+<div id="summaryStats" class="grid grid-cols-2 gap-2 text-xs">
+
+<div class="flex items-center gap-2">
+<span id="count-answered" class="q-btn q-answered">0</span> Answered
+</div>
+
+<div class="flex items-center gap-2">
+<span id="count-not-answered" class="q-btn q-not-answered">0</span> Not Answered
+</div>
+
+<div class="flex items-center gap-2">
+<span id="count-marked" class="q-btn q-marked">0</span> Marked
+</div>
+
+<div class="flex items-center gap-2">
+<span id="count-not-visited" class="q-btn">18</span> Not Visited
+</div>
+
+</div>
+
+<button onclick="confirmSubmit()" class="w-full mt-10 bg-red-600 text-white py-3 rounded-lg font-bold hover:bg-red-700">
+SUBMIT TEST
+</button>
+
+</div>
+
+</div>
+
+</main>
+
+<script>
+
+let currentIdx=0
+let timeLeft=30*60
+let questions=[]
+let userAnswers=[]
+let status=[]
+let setNum=new URLSearchParams(window.location.search).get('set')||'1'
+
+/* FIXED DATA LOADING */
+
+const rawData = JSON.parse(localStorage.getItem("currentTestData"))
+
+if(!rawData){
+alert("Test data not found. Please open from sets page.")
+window.location.href="sets.html"
+}
+
+rawData.passages.forEach((p,pIdx)=>{
+p.questions.forEach(q=>{
+questions.push({
+...q,
+passageTitle:`Passage ${pIdx+1}`,
+passageText:p.text
+})
+})
+})
+
+userAnswers=new Array(questions.length).fill(null)
+status=new Array(questions.length).fill('not-visited')
+
+document.getElementById('setLabel').innerText=setNum
+
+renderQuestion()
+startTimer()
+
+/* TIMER */
+
+function startTimer(){
+
+const timerEl=document.getElementById('timer')
+
+const interval=setInterval(()=>{
+
+timeLeft--
+
+let m=Math.floor(timeLeft/60)
+let s=timeLeft%60
+
+timerEl.innerText=`${m}:${s<10?'0':''}${s}`
+
+if(timeLeft<=0){
+
+clearInterval(interval)
+autoSubmit()
+
+}
+
+},1000)
+
+}
+
+function renderQuestion(){
+
+const q=questions[currentIdx]
+
+document.getElementById('qIdxDisplay').innerText=currentIdx+1
+document.getElementById('questionText').innerText=q.question
+document.getElementById('passageTitle').innerText=q.passageTitle
+document.getElementById('passageText').innerText=q.passageText
+
+const optList=document.getElementById('optionsList')
+optList.innerHTML=''
+
+q.options.forEach((opt,i)=>{
+
+const letter=String.fromCharCode(65+i)
+const isSelected=userAnswers[currentIdx]===letter
+
+optList.innerHTML+=`
+
+<label class="flex items-center p-3 border rounded-lg cursor-pointer ${isSelected?'bg-blue-50 border-blue-500':''}">
+
+<input type="radio" name="option" ${isSelected?'checked':''} onchange="selectOption('${letter}')">
+
+<span class="ml-3">${letter}. ${opt}</span>
+
+</label>
+
+`
+
+})
+
+renderPalette()
+updateSummary()
+
+}
+
+function renderPalette(){
+
+const grid=document.getElementById('paletteGrid')
+grid.innerHTML=''
+
+status.forEach((s,i)=>{
+
+let cls=s==='answered'?'q-answered':s==='not-answered'?'q-not-answered':s==='marked'?'q-marked':''
+
+grid.innerHTML+=`<div onclick="jumpTo(${i})" class="q-btn ${cls} ${currentIdx===i?'q-active':''}">${i+1}</div>`
+
+})
+
+}
+
+function selectOption(val){
+
+userAnswers[currentIdx]=val
+renderQuestion()
+
+}
+
+function saveAndNext(){
+
+status[currentIdx]=userAnswers[currentIdx]!==null?'answered':'not-answered'
+
+if(currentIdx<questions.length-1){
+currentIdx++
+renderQuestion()
+}
+
+}
+
+function markForReview(){
+
+status[currentIdx]='marked'
+
+if(currentIdx<questions.length-1){
+currentIdx++
+renderQuestion()
+}
+
+}
+
+function clearResponse(){
+
+userAnswers[currentIdx]=null
+status[currentIdx]='not-visited'
+renderQuestion()
+
+}
+
+function jumpTo(i){
+
+if(status[currentIdx]==='not-visited')status[currentIdx]='not-answered'
+
+currentIdx=i
+renderQuestion()
+
+}
+
+function updateSummary(){
+
+document.getElementById('count-answered').innerText=status.filter(s=>s==='answered').length
+document.getElementById('count-not-answered').innerText=status.filter(s=>s==='not-answered').length
+document.getElementById('count-marked').innerText=status.filter(s=>s==='marked').length
+document.getElementById('count-not-visited').innerText=status.filter(s=>s==='not-visited').length
+
+}
+
+function confirmSubmit(){
+
+if(confirm("Are you sure you want to submit the test?"))autoSubmit()
+
+}
+
+function autoSubmit(){
+
+let correct=0,wrong=0
+
+userAnswers.forEach((ans,i)=>{
+
+if(ans!==null){
+
+if(ans===questions[i].answer)correct++
+else wrong++
+
+}
+
+})
+
+const score=(correct*5)-(wrong*1)
+
+localStorage.setItem('lastScore',JSON.stringify({
+correct,
+wrong,
+score,
+total:questions.length
+}))
+
+window.location.href='result.html'
+
+}
+
+</script>
+
+</body>
+</html>

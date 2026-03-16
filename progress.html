@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Test Analytics | Real-Time Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f3f6f9; color: #2c3e50; }
+        .stat-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); display: flex; align-items: center; gap: 15px; }
+        .chart-container { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 15px rgba(0,0,0,0.04); height: 100%; }
+        
+        /* Back Button Style */
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #64748b;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+            margin-bottom: 15px;
+        }
+        .back-btn:hover { color: #1e293b; transform: translateX(-3px); }
+    </style>
+</head>
+<body class="p-8">
+
+    <div class="max-w-7xl mx-auto">
+        
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+
+        <div class="mb-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-extrabold text-[#1e293b]">English Mastery Dashboard</h1>
+                <p class="text-slate-500 font-medium">Tracking 180 Questions • 10 Day Challenge</p>
+            </div>
+            <button onclick="clearHistory()" class="text-xs font-bold text-red-400 bg-red-50 px-4 py-2 rounded-lg hover:bg-red-100 transition-all">
+                RESET ALL DATA
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card">
+                <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-xl"><i class="fas fa-calendar-day"></i></div>
+                <div><p class="text-3xl font-black" id="totalTests">0</p><p class="text-xs font-bold text-slate-400 uppercase">Days Completed</p></div>
+            </div>
+            <div class="stat-card">
+                <div class="w-14 h-14 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 text-xl"><i class="fas fa-pencil-alt"></i></div>
+                <div><p class="text-3xl font-black" id="totalQs">0</p><p class="text-xs font-bold text-slate-400 uppercase">Total Attempted</p></div>
+            </div>
+            <div class="stat-card">
+                <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xl"><i class="fas fa-check-double"></i></div>
+                <div><p class="text-3xl font-black" id="correctAns">0</p><p class="text-xs font-bold text-slate-400 uppercase">Correct Answers</p></div>
+            </div>
+            <div class="stat-card">
+                <div class="w-14 h-14 bg-orange-500 rounded-full flex items-center justify-center text-white text-xl"><i class="fas fa-chart-pie"></i></div>
+                <div><p class="text-3xl font-black" id="avgScore">0%</p><p class="text-xs font-bold text-slate-400 uppercase">Avg. Accuracy</p></div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <div class="chart-container flex flex-col items-center justify-center relative">
+                <h3 class="text-sm font-bold text-slate-400 uppercase mb-6 self-start">Accuracy Breakdown</h3>
+                <div class="w-64 h-64 relative">
+                    <canvas id="gaugeChart"></canvas>
+                    <div class="absolute inset-0 flex items-center justify-center flex-col">
+                        <span class="text-5xl font-black" id="centerScore">0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container lg:col-span-2">
+                <h3 class="text-sm font-bold text-slate-400 uppercase mb-6">Learning Curve (Last 10 Days)</h3>
+                <div class="h-64"><canvas id="lineChart"></canvas></div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div class="chart-container lg:col-span-2">
+                <h3 class="text-sm font-bold text-slate-400 uppercase mb-6">Daily Score Analysis</h3>
+                <div class="h-64"><canvas id="barChart"></canvas></div>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="text-sm font-bold text-slate-400 uppercase mb-6">English Proficiency</h3>
+                <div class="space-y-4">
+                    <div class="bg-green-50 p-4 rounded-xl border-l-4 border-green-500">
+                        <p class="text-xs font-black text-green-700 uppercase mb-2">Strong Skills</p>
+                        <ul class="text-xs font-bold text-slate-600 space-y-1">
+                            <li>• Contextual Meaning Identification</li>
+                            <li>• Inference & Idea Extraction</li>
+                        </ul>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-xl border-l-4 border-red-500">
+                        <p class="text-xs font-black text-red-700 uppercase mb-2">Needs Polish</p>
+                        <ul class="text-xs font-bold text-slate-600 space-y-1">
+                            <li>• Unseen Passage Analysis</li>
+                            <li>• Reading Comprehension</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="text-sm font-bold text-slate-400 uppercase mb-6">Leaderboard (Personal)</h3>
+                <div id="topScores" class="space-y-4">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DATA LOGIC
+        let history = JSON.parse(localStorage.getItem("testHistory")) || [];
+        let last = JSON.parse(localStorage.getItem("lastScore"));
+
+        // Sync with Practice Sets
+        if(last && last.total === 18) { 
+            history.push({
+                date: new Date().toLocaleDateString('en-GB', {day:'2-digit', month:'short'}),
+                score: last.score,
+                correct: last.correct,
+                wrong: last.wrong,
+                total: last.total,
+                accuracy: Math.round((last.correct / last.total) * 100)
+            });
+            if(history.length > 10) history.shift();
+            localStorage.setItem("testHistory", JSON.stringify(history));
+            localStorage.removeItem("lastScore");
+        }
+
+        let totalCorrect = history.reduce((s, t) => s + t.correct, 0);
+        let totalWrong = history.reduce((s, t) => s + t.wrong, 0);
+        let totalAttempted = history.reduce((s, t) => s + t.total, 0);
+        let avgAcc = history.length ? Math.round(history.reduce((s, t) => s + t.accuracy, 0) / history.length) : 0;
+
+        document.getElementById("totalTests").innerText = history.length;
+        document.getElementById("totalQs").innerText = totalAttempted;
+        document.getElementById("correctAns").innerText = totalCorrect;
+        document.getElementById("avgScore").innerText = avgAcc + "%";
+        document.getElementById("centerScore").innerText = avgAcc + "%";
+
+        new Chart(document.getElementById('gaugeChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Correct', 'Wrong'],
+                datasets: [{
+                    data: [totalCorrect || 1, totalWrong || 0],
+                    backgroundColor: ['#22c55e', '#ef4444'],
+                    borderWidth: 0, cutout: '85%'
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        });
+
+        const labels = history.map((t, i) => t.date);
+        new Chart(document.getElementById('lineChart'), {
+            type: 'line',
+            data: {
+                labels: labels.length ? labels : ['Day 1'],
+                datasets: [{
+                    data: history.map(t => t.accuracy).length ? history.map(t => t.accuracy) : [0],
+                    borderColor: '#22c55e',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    fill: true, tension: 0.4, pointRadius: 5
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, max: 100 } }
+            }
+        });
+
+        new Chart(document.getElementById('barChart'), {
+            type: 'bar',
+            data: {
+                labels: labels.length ? labels : ['Day 1'],
+                datasets: [
+                    { label: 'Correct', data: history.map(t => t.correct), backgroundColor: '#22c55e' },
+                    { label: 'Wrong', data: history.map(t => t.wrong), backgroundColor: '#ef4444' }
+                ]
+            },
+            options: {
+                indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                scales: { x: { stacked: true }, y: { stacked: true } }
+            }
+        });
+
+        const topScoresDiv = document.getElementById("topScores");
+        const sorted = [...history].sort((a,b) => b.accuracy - a.accuracy).slice(0,3);
+        if(sorted.length === 0) topScoresDiv.innerHTML = "<p class='text-xs text-slate-400'>No records yet.</p>";
+        sorted.forEach(t => {
+            topScoresDiv.innerHTML += `
+                <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
+                    <span class="font-bold text-sm">${t.date}</span>
+                    <span class="text-blue-600 font-black">${t.accuracy}%</span>
+                </div>`;
+        });
+
+        function clearHistory() {
+            if(confirm("Bhai, pura history delete kar doon?")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
