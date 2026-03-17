@@ -1,240 +1,297 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Practice Arena | CUET 2026</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practice Arena | CUET 2026</title>
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: #FFFDD0;
-            min-height: 100vh;
-        }
+<style>
 
-        /* --- ROYAL ID CARD STYLES --- */
-        #idCardOverlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(15px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
 
-        .id-card {
-            background: white;
-            width: 100%;
-            max-width: 380px;
-            border-radius: 40px;
-            padding: 40px 30px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
-            transform: translateY(50px);
-            opacity: 0;
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-            overflow: hidden;
-            animation: float 4s infinite ease-in-out;
-        }
+body{
+font-family:'Plus Jakarta Sans',sans-serif;
+background:#FFFDD0;
+min-height:100vh
+}
 
-        .id-card::before {
-            content: "";
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: conic-gradient(from 0deg, #ff4545, #00ff99, #0066ff, #ff00ff, #ff4545);
-            animation: rotate 4s linear infinite;
-            z-index: -1;
-        }
-        
-        .id-card::after {
-            content: "";
-            position: absolute;
-            inset: 6px;
-            background: white;
-            border-radius: 34px;
-            z-index: -1;
-        }
+/* ID CARD */
 
-        @keyframes rotate { 100% { transform: rotate(360deg); } }
-        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+#idCardOverlay{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.85);
+backdrop-filter:blur(15px);
+z-index:1000;
+align-items:center;
+justify-content:center;
+padding:20px
+}
 
-        #idCardOverlay.active { display: flex; }
-        #idCardOverlay.active .id-card { transform: translateY(0); opacity: 1; }
+.id-card{
+background:white;
+width:100%;
+max-width:380px;
+border-radius:40px;
+padding:40px 30px;
+text-align:center;
+position:relative;
+box-shadow:0 40px 100px rgba(0,0,0,.5);
+transform:translateY(50px);
+opacity:0;
+transition:.6s cubic-bezier(.23,1,.32,1);
+overflow:hidden
+}
 
-        .photo-space {
-            width: 120px; height: 120px;
-            border-radius: 50%;
-            background: #f3f4f6;
-            margin: 0 auto 20px;
-            border: 4px solid white;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+#idCardOverlay.active{
+display:flex
+}
 
-        .id-label { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; font-weight: 800; }
-        .id-value { font-size: 15px; font-weight: 700; color: #1e293b; margin-bottom: 12px; }
+#idCardOverlay.active .id-card{
+transform:translateY(0);
+opacity:1
+}
 
-        .id-badge-premium {
-            background: linear-gradient(90deg, #f59e0b, #ef4444);
-            color: white;
-            padding: 8px 25px;
-            border-radius: 100px;
-            font-size: 11px;
-            font-weight: 800;
-            margin-top: 20px;
-            display: inline-block;
-            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
-        }
+.photo-space{
+width:120px;
+height:120px;
+border-radius:50%;
+background:#f3f4f6;
+margin:0 auto 20px;
+border:4px solid white;
+box-shadow:0 15px 35px rgba(0,0,0,.1);
+overflow:hidden
+}
 
-        /* --- SET CARDS STYLES (Darker Contrast Gradients) --- */
-        .set-card {
-            transition: all .4s cubic-bezier(.175,.885,.32,1.275);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            border-radius: 40px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        .set-card:hover { transform: translateY(-12px) scale(1.03); box-shadow: 0 30px 40px -10px rgba(0,0,0,0.2); }
-        .set-card i.bg-icon { position: absolute; right: -15px; bottom: -15px; font-size: 6rem; opacity: .12; transform: rotate(-15deg); }
+.id-label{
+font-size:9px;
+text-transform:uppercase;
+letter-spacing:2px;
+color:#94a3b8;
+font-weight:800
+}
 
-        .set-1{background: linear-gradient(135deg, #e11d48, #be123c);} /* Deep Rose/Red */
-        .set-2{background: linear-gradient(135deg, #0d9488, #0f766e);} /* Deep Teal */
-        .set-3{background: linear-gradient(135deg, #16a34a, #15803d);} /* Rich Green */
-        .set-4{background: linear-gradient(135deg, #ca8a04, #a16207);} /* Golden Ochre */
-        .set-5{background: linear-gradient(135deg, #4f46e5, #4338ca);} /* Indigo Purple */
-        .set-6{background: linear-gradient(135deg, #ea580c, #c2410c);} /* Burnt Orange */
-        .set-7{background: linear-gradient(135deg, #1e293b, #0f172a);} /* Deep Navy/Slate */
-        .set-8{background: linear-gradient(135deg, #db2777, #be185d);} /* Dark Pink */
-        .set-9{background: linear-gradient(135deg, #2563eb, #1d4ed8);} /* Royal Blue */
-        .set-10{background: linear-gradient(135deg, #7c3aed, #6d28d9);} /* Deep Violet */
+.id-value{
+font-size:15px;
+font-weight:700;
+color:#1e293b;
+margin-bottom:12px
+}
 
-    </style>
+.id-badge-premium{
+background:linear-gradient(90deg,#f59e0b,#ef4444);
+color:white;
+padding:8px 25px;
+border-radius:100px;
+font-size:11px;
+font-weight:800;
+margin-top:20px;
+display:inline-block
+}
+
+/* SET CARDS */
+
+.set-card{
+transition:.4s cubic-bezier(.175,.885,.32,1.275);
+cursor:pointer;
+position:relative;
+overflow:hidden;
+border-radius:40px;
+box-shadow:0 10px 25px rgba(0,0,0,.1)
+}
+
+.set-card:hover{
+transform:translateY(-12px) scale(1.03)
+}
+
+.set-card i{
+position:absolute;
+right:-15px;
+bottom:-15px;
+font-size:6rem;
+opacity:.12
+}
+
+.set-1{background:linear-gradient(135deg,#e11d48,#be123c)}
+.set-2{background:linear-gradient(135deg,#0d9488,#0f766e)}
+.set-3{background:linear-gradient(135deg,#16a34a,#15803d)}
+.set-4{background:linear-gradient(135deg,#ca8a04,#a16207)}
+.set-5{background:linear-gradient(135deg,#4f46e5,#4338ca)}
+.set-6{background:linear-gradient(135deg,#ea580c,#c2410c)}
+.set-7{background:linear-gradient(135deg,#1e293b,#0f172a)}
+.set-8{background:linear-gradient(135deg,#db2777,#be185d)}
+.set-9{background:linear-gradient(135deg,#2563eb,#1d4ed8)}
+.set-10{background:linear-gradient(135deg,#7c3aed,#6d28d9)}
+
+</style>
 </head>
 
 <body class="pb-12">
 
-    <div id="idCardOverlay" onclick="closeID()">
-        <div class="id-card" onclick="event.stopPropagation()">
-            <button class="absolute top-6 right-8 text-gray-400 hover:text-red-500" onclick="closeID()">
-                <i class="fas fa-times text-xl"></i>
-            </button>
-            
-            <div class="photo-space">
-                <img src="vandana.jpg" alt="Vandana Gupta" class="w-full h-full object-cover">
-            </div>
+<!-- ID CARD -->
 
-            <h2 class="text-3xl font-black text-slate-800">Vandana Gupta</h2>
-            <p class="text-amber-500 font-bold text-xs uppercase tracking-[3px] mb-6">Elite CUET Aspirant</p>
+<div id="idCardOverlay" onclick="closeID()">
 
-            <div class="bg-gray-50 rounded-[25px] p-6 grid grid-cols-2 gap-y-4 text-left border border-gray-100">
-                <div>
-                    <p class="id-label">Birth Date</p>
-                    <p class="id-value">06/01/2006</p>
-                </div>
-                <div>
-                    <p class="id-label">Target</p>
-                    <p class="id-value">100 Percentile</p>
-                </div>
-                <div>
-                    <p class="id-label">Father's Name</p>
-                    <p class="id-value">Rajkumar Gupta</p>
-                </div>
-                <div>
-                    <p class="id-label">Mother's Name</p>
-                    <p class="id-value">Shanti Devi</p>
-                </div>
-            </div>
+<div class="id-card" onclick="event.stopPropagation()">
 
-            <div class="id-badge-premium uppercase">
-                <i class="fas fa-crown mr-2"></i> Rank 1 Candidate
-            </div>
-        </div>
-    </div>
+<button class="absolute top-6 right-8 text-gray-400 hover:text-red-500" onclick="closeID()">
+<i class="fas fa-times text-xl"></i>
+</button>
 
-    <header class="sticky top-0 z-50 p-4 bg-white/70 backdrop-blur-xl border-b border-gray-200/30">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <a href="index.html" class="text-gray-500 hover:text-indigo-600 transition font-bold text-sm">
-                <i class="fas fa-chevron-left mr-2"></i> BACK
-            </a>
-            <h1 class="text-lg font-extrabold text-slate-800 tracking-tighter uppercase">Practice Arena</h1>
-            <div onclick="openID()" class="w-10 h-10 rounded-full overflow-hidden shadow-lg cursor-pointer hover:rotate-12 transition-all border-2 border-indigo-500">
-                <img src="vandana.jpg" alt="V" class="w-full h-full object-cover">
-            </div>
-        </div>
-    </header>
+<div class="photo-space">
+<img src="vandana.jpg" class="w-full h-full object-cover">
+</div>
 
-    <main class="max-w-6xl mx-auto mt-12 px-6">
-        <div class="text-center mb-12">
-            <h2 class="text-5xl font-black text-slate-900 mb-4 tracking-tighter">Choose Your Set</h2>
-            <p class="text-slate-500 font-medium max-w-md mx-auto">
-                Vandna, excellence is a habit. Let's conquer these 10 sets together!
-            </p>
-        </div>
+<h2 class="text-3xl font-black text-slate-800">Vandana Gupta</h2>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8" id="setsContainer"></div>
-    </main>
+<p class="text-amber-500 font-bold text-xs uppercase tracking-[3px] mb-4">
+Elite CUET Aspirant
+</p>
 
-    <script>
-        function openID() { document.getElementById('idCardOverlay').classList.add('active'); }
-        function closeID() { document.getElementById('idCardOverlay').classList.remove('active'); }
+<!-- 🔥 MOCK HISTORY BUTTON -->
 
-        const setsContainer = document.getElementById('setsContainer');
-        const setColors = ['set-1','set-2','set-3','set-4','set-5','set-6','set-7','set-8','set-9','set-10'];
+<a href="history.html"
+class="block mb-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl text-sm shadow-lg transition">
+<i class="fas fa-clock-rotate-left mr-2"></i>
+Mock History
+</a>
 
-        for(let i=1; i<=10; i++) {
-            const setCard = `
-                <div onclick="openSet(${i})" class="set-card ${setColors[i-1]} p-8 text-white">
-                    <i class="fas fa-book-open bg-icon"></i>
-                    <h3 class="text-[10px] font-black opacity-80 uppercase tracking-[3px] mb-2">CUET 2026</h3>
-                    <h4 class="text-3xl font-black mb-4">SET ${i}</h4>
-                    <div class="text-xs space-y-2 opacity-95 font-bold">
-                        <p><i class="fas fa-file-alt mr-2"></i> 3 Passages</p>
-                        <p><i class="fas fa-check-circle mr-2"></i> 18 Questions</p>
-                        <p><i class="fas fa-clock mr-2"></i> 30 Minutes</p>
-                    </div>
-                    <button class="mt-8 w-full py-3 bg-white text-gray-900 rounded-2xl text-xs font-black uppercase shadow-lg active:scale-95 transition">Start Now</button>
-                </div>`;
-            setsContainer.innerHTML += setCard;
-        }
+<div class="bg-gray-50 rounded-[25px] p-6 grid grid-cols-2 gap-y-4 text-left border border-gray-100">
 
-        function openSet(setNum) {
-            const iframe = document.createElement('iframe');
-            iframe.style.display = 'none';
-            iframe.src = `set${setNum}.html`; 
-            document.body.appendChild(iframe);
+<div>
+<p class="id-label">Birth Date</p>
+<p class="id-value">06/01/2006</p>
+</div>
 
-            iframe.onload = function() {
-                try {
-                    if(iframe.contentWindow && iframe.contentWindow.sets) {
-                        const testData = iframe.contentWindow.sets[setNum];
-                        if(testData) {
-                            localStorage.setItem('currentTestData', JSON.stringify(testData));
-                            window.location.href = `test.html?set=${setNum}`;
-                        } else {
-                            alert("Bhai, is set ka data file mein nahi mila!");
-                        }
-                    } else {
-                        alert(`Error: set${setNum}.html check kar.`);
-                    }
-                } catch(e) {
-                    alert("Files same folder mein rakho.");
-                }
-                document.body.removeChild(iframe);
-            };
-        }
-    </script>
+<div>
+<p class="id-label">Target</p>
+<p class="id-value">100 Percentile</p>
+</div>
+
+<div>
+<p class="id-label">Father's Name</p>
+<p class="id-value">Rajkumar Gupta</p>
+</div>
+
+<div>
+<p class="id-label">Mother's Name</p>
+<p class="id-value">Shanti Devi</p>
+</div>
+
+</div>
+
+<div class="id-badge-premium uppercase">
+<i class="fas fa-crown mr-2"></i> Rank 1 Candidate
+</div>
+
+</div>
+</div>
+
+<!-- HEADER -->
+
+<header class="sticky top-0 z-50 p-4 bg-white/70 backdrop-blur-xl border-b border-gray-200/30">
+
+<div class="max-w-6xl mx-auto flex justify-between items-center">
+
+<a href="index.html" class="text-gray-500 hover:text-indigo-600 transition font-bold text-sm">
+<i class="fas fa-chevron-left mr-2"></i> BACK
+</a>
+
+<h1 class="text-lg font-extrabold text-slate-800 tracking-tighter uppercase">
+Practice Arena
+</h1>
+
+<div onclick="openID()" class="w-10 h-10 rounded-full overflow-hidden shadow-lg cursor-pointer border-2 border-indigo-500">
+<img src="vandana.jpg" class="w-full h-full object-cover">
+</div>
+
+</div>
+</header>
+
+<main class="max-w-6xl mx-auto mt-12 px-6">
+
+<div class="text-center mb-12">
+
+<h2 class="text-5xl font-black text-slate-900 mb-4 tracking-tighter">
+Choose Your Set
+</h2>
+
+<p class="text-slate-500 font-medium max-w-md mx-auto">
+Vandna, excellence is a habit. Let's conquer these 10 sets together!
+</p>
+
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8" id="setsContainer"></div>
+
+</main>
+
+<script>
+
+function openID(){
+document.getElementById('idCardOverlay').classList.add('active')
+}
+
+function closeID(){
+document.getElementById('idCardOverlay').classList.remove('active')
+}
+
+const setsContainer=document.getElementById('setsContainer')
+
+const setColors=[
+'set-1','set-2','set-3','set-4','set-5',
+'set-6','set-7','set-8','set-9','set-10'
+]
+
+for(let i=1;i<=10;i++){
+
+const setCard=`
+
+<div onclick="openSet(${i})" class="set-card ${setColors[i-1]} p-8 text-white">
+
+<i class="fas fa-book-open"></i>
+
+<h3 class="text-[10px] font-black opacity-80 uppercase tracking-[3px] mb-2">
+CUET 2026
+</h3>
+
+<h4 class="text-3xl font-black mb-4">
+SET ${i}
+</h4>
+
+<div class="text-xs space-y-2 opacity-95 font-bold">
+
+<p>3 Passages</p>
+<p>18 Questions</p>
+<p>30 Minutes</p>
+
+</div>
+
+<button class="mt-8 w-full py-3 bg-white text-gray-900 rounded-2xl text-xs font-black uppercase shadow-lg">
+Start Now
+</button>
+
+</div>
+
+`
+
+setsContainer.innerHTML+=setCard
+
+}
+
+function openSet(setNum){
+
+localStorage.setItem("lastSet",setNum)
+
+window.location.href="test.html?set="+setNum
+
+}
+
+</script>
+
 </body>
 </html>
